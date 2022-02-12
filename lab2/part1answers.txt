@@ -1,0 +1,17 @@
+1. what does the program print, and in what order?
+
+The program outputs the following:
+
+waiting...
+^C received an interrupt signal through Ctrl-C.
+Going to sleep.
+ Notice the process is not exiting immediately
+Out of here.
+Now the process will terminate with the exit system call
+
+2. describe exactly what is happening to produce the answer observed for the above
+question
+
+sighandler() is set as the signal handler for the SIGINT signal. when Control+C are pressed, SIGINT is sent,
+and sigHandler(SIGINT) is called, which prints "Notice the process is not exiting immediately", waits one
+second, then prints the rest of the statements before terminating.
