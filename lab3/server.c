@@ -123,7 +123,7 @@ int main(int argc, char const *argv[])
           exit(EXIT_FAILURE);
         }
         else {
-
+          buffer[len] = 0;
           printf("Client 1: %s\n", buffer);
 
           if(client2 < 0) {
@@ -131,7 +131,6 @@ int main(int argc, char const *argv[])
             send(client1, needOther, strlen(needOther), 0);
           }
           else {
-            buffer[len] = 0;
             send(client2, buffer, strlen(buffer), 0);
           }
 
@@ -163,7 +162,7 @@ int main(int argc, char const *argv[])
           exit(EXIT_FAILURE);
         }
         else {
-
+          buffer[len] = 0;
           printf("Client 2: %s\n", buffer);
 
           if(client1 < 0) {
@@ -171,7 +170,6 @@ int main(int argc, char const *argv[])
             send(client2, needOther, strlen(needOther), 0);
           }
           else {
-            buffer[len] = 0;
             send(client1, buffer, strlen(buffer), 0);
           }
 
