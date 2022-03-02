@@ -92,6 +92,7 @@ int main(int argc, char const *argv[])
           // Both clients already joined -- cannot accept another
           printf("A third client attempted to connect\n");
           send(newSocket, clientsFull, strlen(clientsFull), 0);
+          close(newSocket);
         }
       }
       else {
@@ -125,6 +126,11 @@ int main(int argc, char const *argv[])
         else {
           buffer[len] = 0;
           printf("Client 1: %s\n", buffer);
+
+          if( strcmp(buffer, "BYE") == 0 ) {
+            // SHUTDOWN
+            return 0;
+          }
 
           if(client2 < 0) {
             printf("We don't have the other client!\n");
@@ -165,6 +171,11 @@ int main(int argc, char const *argv[])
           buffer[len] = 0;
           printf("Client 2: %s\n", buffer);
 
+          if( strcmp(buffer, "BYE") == 0 ) {
+            // SHUTDOWN
+            return 0;
+          }
+
           if(client1 < 0) {
             printf("We don't have the other client!\n");
             send(client2, needOther, strlen(needOther), 0);
@@ -179,13 +190,6 @@ int main(int argc, char const *argv[])
 
       usleep(1000);
     }
-
-    /*
-    valread = read( new_socket , buffer, 1024);
-    printf("%s\n",buffer );
-    send(new_socket , hello , strlen(hello) , 0 );
-    printf("Hello message sent\n");
-    */
 
     return 0;
   }
