@@ -166,7 +166,7 @@ int main(int argc, char const *argv[])
 
           printf("Client 2: %s\n", buffer);
 
-          if(client2 < 0) {
+          if(client1 < 0) {
             printf("We don't have the other client!\n");
             send(client2, needOther, strlen(needOther), 0);
           }
