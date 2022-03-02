@@ -84,9 +84,11 @@ int main(int argc, char const *argv[])
         fcntl(newSocket, F_SETFL, flags | O_NONBLOCK);
         if(client1 < 0) {
           client1 = newSocket;
+          printf("Client 1 connected\n");
         }
         else if(client2 < 0) {
           client2 = newSocket;
+          printf("Client 2 connected\n");
         }
         else {
           // Both clients already joined -- cannot accept another
