@@ -46,6 +46,7 @@ int main(int argc, char const *argv[])
       exit(EXIT_FAILURE);
     }
 
+    // Make server socket non-blocking
     int flags = fcntl(server_fd, F_GETFL, 0);
     fcntl(server_fd, F_SETFL, flags | O_NONBLOCK);
 
@@ -80,8 +81,11 @@ int main(int argc, char const *argv[])
         //continue...
       }
       else if(newSocket >= 0) {
+        // make the file descriptor for the newSocket non-blocking
         int flags = fcntl(newSocket, F_GETFL, 0);
         fcntl(newSocket, F_SETFL, flags | O_NONBLOCK);
+
+        // If we're missing a client, take this newSocket in
         if(client1 < 0) {
           client1 = newSocket;
           printf("Client 1 connected\n");
@@ -90,8 +94,8 @@ int main(int argc, char const *argv[])
           client2 = newSocket;
           printf("Client 2 connected\n");
         }
+        // Both clients already joined -- cannot accept another
         else {
-          // Both clients already joined -- cannot accept another
           printf("A third client attempted to connect\n");
           send(newSocket, clientsFull, strlen(clientsFull), 0);
           close(newSocket);
