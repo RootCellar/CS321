@@ -28,8 +28,8 @@ int main(int argc, char const *argv[])
   char *string;
 
   //String constants
-  char *clientsFull = "Sorry, no more clients can join!";
-  char *needOther = "Only one client is connected!";
+  char *clientsFull = "Sorry, no more clients can join!\n";
+  char *needOther = "Only one client is connected!\n";
 
   // Creating socket file descriptor
   if ((server_fd = socket(AF_INET, SOCK_STREAM, 0)) == 0)
@@ -71,6 +71,9 @@ int main(int argc, char const *argv[])
     int client2 = -1;
 
     while(1) {
+
+      // Attempt to Accept a connection
+
       errno = 0;
       newSocket = accept(server_fd, (struct sockaddr *)&address, (socklen_t*)&addrlen);
       if(newSocket < 0 && errno == EAGAIN) {
@@ -96,14 +99,23 @@ int main(int argc, char const *argv[])
         exit(EXIT_FAILURE);
       }
 
+      // Client 1 sending to Client 2
+
       if(client1 > 0) {
 
         errno = 0;
         int len = read(client1, buffer, 2048);
 
-        perror("Read");
-        if(len < 0 && errno == EAGAIN) {
+        //perror("Read");
+        //printf("%d\n", len);
+        if(errno == EAGAIN) {
           //continue...
+        }
+        else if(len == 0) {
+          // socket is disconnected
+          printf("Client 1 disconnected\n");
+          close(client1);
+          client1 = -1;
         }
         else if (errno != 0) {
           perror("error on read");
@@ -111,8 +123,8 @@ int main(int argc, char const *argv[])
           exit(EXIT_FAILURE);
         }
         else {
-          
-          printf("%s\n", buffer);
+
+          printf("Client 1: %s\n", buffer);
 
           if(client2 < 0) {
             printf("We don't have the other client!\n");
@@ -121,6 +133,46 @@ int main(int argc, char const *argv[])
           else {
             buffer[len] = 0;
             send(client2, buffer, strlen(buffer), 0);
+          }
+
+        }
+
+      }
+
+      // Client 2 sending to Client 1
+
+      if(client2 > 0) {
+
+        errno = 0;
+        int len = read(client2, buffer, 2048);
+
+        //perror("Read");
+        //printf("%d\n", len);
+        if(errno == EAGAIN) {
+          //continue...
+        }
+        else if(len == 0) {
+          // socket is disconnected
+          printf("Client 2 disconnected\n");
+          close(client2);
+          client2 = -1;
+        }
+        else if (errno != 0) {
+          perror("error on read");
+          printf("%d", len);
+          exit(EXIT_FAILURE);
+        }
+        else {
+
+          printf("Client 2: %s\n", buffer);
+
+          if(client2 < 0) {
+            printf("We don't have the other client!\n");
+            send(client2, needOther, strlen(needOther), 0);
+          }
+          else {
+            buffer[len] = 0;
+            send(client1, buffer, strlen(buffer), 0);
           }
 
         }
