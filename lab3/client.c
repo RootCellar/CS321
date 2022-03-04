@@ -24,6 +24,7 @@ int main(int argc, char const *argv[])
     struct sockaddr_in serv_addr;
     char *string = "hello";
     char buffer[2048] = {0};
+
     if ((sock = socket(AF_INET, SOCK_STREAM, 0)) < 0)
     {
         printf("\n Socket creation error \n");
@@ -54,20 +55,15 @@ int main(int argc, char const *argv[])
     flags = fcntl(sock, F_GETFL, 0);
     fcntl(sock, F_SETFL, flags | O_NONBLOCK);
 
-    /*
-    send(sock , string , strlen(string) , 0 );
-    printf("Hello message sent\n");
-    valread = read( sock , buffer, 1024);
-    printf("%s\n",buffer );
-    */
-
     while(1) {
+
+      // Reset Error, attempt to read data from the socket
 
       errno = 0;
       int len = read(sock, buffer, 2048);
 
       if(errno == EAGAIN) {
-        //continue...
+        // No data, continue...
       }
       else if(len == 0) {
         // socket is disconnected
@@ -76,22 +72,26 @@ int main(int argc, char const *argv[])
         sock = -1;
       }
       else if (errno != 0) {
+        // Some other error occurred
         perror("error on read");
-        printf("%d", len);
         exit(EXIT_FAILURE);
       }
       else {
+        // Print received data
         buffer[len] = 0;
         printf("From Server: %s\n", buffer);
       }
+
+      // Reset Error, attempt to read from STDIN
 
       errno = 0;
       len = read(STDIN_FILENO, buffer, 2048);
 
       if(errno == EAGAIN) {
-        //continue...
+        // No input, continue...
       }
       else {
+        // Send input from STDIN to server
         buffer[len] = 0;
         send(sock, buffer, strlen(buffer), 0);
       }

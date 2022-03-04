@@ -113,10 +113,8 @@ int main(int argc, char const *argv[])
         errno = 0;
         int len = read(client1, buffer, 2048);
 
-        //perror("Read");
-        //printf("%d\n", len);
         if(errno == EAGAIN) {
-          //continue...
+          // No data, continue...
         }
         else if(len == 0) {
           // socket is disconnected
@@ -130,7 +128,7 @@ int main(int argc, char const *argv[])
           exit(EXIT_FAILURE);
         }
         else {
-          buffer[len] = 0;
+          buffer[len-1] = 0;
           printf("Client 1: %s\n", buffer);
 
           if( strcmp(buffer, "BYE") == 0 ) {
@@ -157,10 +155,8 @@ int main(int argc, char const *argv[])
         errno = 0;
         int len = read(client2, buffer, 2048);
 
-        //perror("Read");
-        //printf("%d\n", len);
         if(errno == EAGAIN) {
-          //continue...
+          // No data, continue...
         }
         else if(len == 0) {
           // socket is disconnected
@@ -174,7 +170,7 @@ int main(int argc, char const *argv[])
           exit(EXIT_FAILURE);
         }
         else {
-          buffer[len] = 0;
+          buffer[len-1] = 0;
           printf("Client 2: %s\n", buffer);
 
           if( strcmp(buffer, "BYE") == 0 ) {
