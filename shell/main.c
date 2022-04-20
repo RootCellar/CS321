@@ -1,14 +1,13 @@
-/***************************************************************************//**
-
-  @file         main.c
-
-  @author       Stephen Brennan
-
-  @date         Thursday,  8 January 2015
-
-  @brief        LSH (Libstephen SHell)
-
-*******************************************************************************/
+/*
+ *
+ * Darian Marvel
+ * 4/17/2022
+ * Writing a shell for CS321
+ *
+ * Started from Stephen Brennan's tutorial:
+ * https://brennan.io/2015/01/16/write-a-shell-in-c/
+ *
+*/
 
 #include <sys/wait.h>
 #include <sys/types.h>
@@ -17,16 +16,10 @@
 #include <stdio.h>
 #include <string.h>
 
-/*
-  Function Declarations for builtin shell commands:
- */
 int cd_command(char **args);
 int help_command(char **args);
 int exit_command(char **args);
 
-/*
-  List of builtin commands, followed by their corresponding functions.
- */
 char *builtin_str[] = {
   "cd",
   "help",
@@ -47,11 +40,6 @@ int num_builtins() {
   Builtin function implementations.
 */
 
-/**
-   @brief Bultin command: change directory.
-   @param args List of args.  args[0] is "cd".  args[1] is the directory.
-   @return Always returns 1, to continue executing.
- */
 int cd_command(char **args)
 {
   if (args[1] == NULL) {
@@ -64,11 +52,6 @@ int cd_command(char **args)
   return 1;
 }
 
-/**
-   @brief Builtin command: print help.
-   @param args List of args.  Not examined.
-   @return Always returns 1, to continue executing.
- */
 int help_command(char **args)
 {
   int i;
@@ -84,21 +67,11 @@ int help_command(char **args)
   return 1;
 }
 
-/**
-   @brief Builtin command: exit.
-   @param args List of args.  Not examined.
-   @return Always returns 0, to terminate execution.
- */
 int exit_command(char **args)
 {
   return 0;
 }
 
-/**
-  @brief Launch a program and wait for it to terminate.
-  @param args Null terminated list of arguments (including program).
-  @return Always returns 1, to continue execution.
- */
 int launch(char **args)
 {
   pid_t pid;
@@ -124,11 +97,6 @@ int launch(char **args)
   return 1;
 }
 
-/**
-   @brief Execute shell built-in or launch program.
-   @param args Null terminated list of arguments.
-   @return 1 if the shell should continue running, 0 if it should terminate
- */
 int execute(char **args)
 {
   int i;
@@ -147,10 +115,6 @@ int execute(char **args)
   return launch(args);
 }
 
-/**
-   @brief Read a line of input from stdin.
-   @return The line from stdin.
- */
 char *read_line(void)
 {
 #ifdef CASH_USE_STD_GETLINE
@@ -206,11 +170,7 @@ char *read_line(void)
 
 #define CASH_TOK_BUFSIZE 64
 #define CASH_TOK_DELIM " \t\r\n\a"
-/**
-   @brief Split a line into tokens (very naively).
-   @param line The line.
-   @return Null-terminated array of tokens.
- */
+
 char **split_line(char *line)
 {
   int bufsize = CASH_TOK_BUFSIZE, position = 0;
@@ -244,9 +204,6 @@ char **split_line(char *line)
   return tokens;
 }
 
-/**
-   @brief Loop getting input and executing it.
- */
 void loop(void)
 {
   char *line;
@@ -264,12 +221,6 @@ void loop(void)
   } while (status);
 }
 
-/**
-   @brief Main entry point.
-   @param argc Argument count.
-   @param argv Argument vector.
-   @return status code
- */
 int main(int argc, char **argv)
 {
   // Load config files, if any.
