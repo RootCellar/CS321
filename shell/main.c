@@ -16,11 +16,11 @@
 #include <stdio.h>
 #include <string.h>
 
-int cd_command(char **args);
-int help_command(char **args);
-int exit_command(char **args);
+int cd_command(char** args);
+int help_command(char** args);
+int exit_command(char** args);
 
-char *builtin_str[] = {
+char* builtin_str[] = {
   "cd",
   "help",
   "exit"
@@ -40,7 +40,7 @@ int num_builtins() {
   Builtin function implementations.
 */
 
-int cd_command(char **args)
+int cd_command(char** args)
 {
   if (args[1] == NULL) {
     fprintf(stderr, "cash: expected argument to \"cd\"\n");
@@ -52,10 +52,10 @@ int cd_command(char **args)
   return 1;
 }
 
-int help_command(char **args)
+int help_command(char** args)
 {
   int i;
-  printf("Stephen Brennan's CASH\n");
+  printf("Darian Marvel's CASH\n");
   printf("Type program names and arguments, and hit enter.\n");
   printf("The following are built in:\n");
 
@@ -67,12 +67,12 @@ int help_command(char **args)
   return 1;
 }
 
-int exit_command(char **args)
+int exit_command(char** args)
 {
   return 0;
 }
 
-int launch(char **args)
+int launch(char** args)
 {
   pid_t pid;
   int status;
@@ -97,7 +97,7 @@ int launch(char **args)
   return 1;
 }
 
-int execute(char **args)
+int execute(char** args)
 {
   int i;
 
@@ -115,10 +115,10 @@ int execute(char **args)
   return launch(args);
 }
 
-char *read_line(void)
+char* read_line(void)
 {
 #ifdef CASH_USE_STD_GETLINE
-  char *line = NULL;
+  char* line = NULL;
   ssize_t bufsize = 0; // have getline allocate a buffer for us
   if (getline(&line, &bufsize, stdin) == -1) {
     if (feof(stdin)) {
@@ -133,7 +133,7 @@ char *read_line(void)
 #define CASH_RL_BUFSIZE 1024
   int bufsize = CASH_RL_BUFSIZE;
   int position = 0;
-  char *buffer = malloc(sizeof(char) * bufsize);
+  char* buffer = malloc(sizeof(char) * bufsize);
   int c;
 
   if (!buffer) {
@@ -171,11 +171,11 @@ char *read_line(void)
 #define CASH_TOK_BUFSIZE 64
 #define CASH_TOK_DELIM " \t\r\n\a"
 
-char **split_line(char *line)
+char** split_line(char* line)
 {
   int bufsize = CASH_TOK_BUFSIZE, position = 0;
-  char **tokens = malloc(bufsize * sizeof(char*));
-  char *token, **tokens_backup;
+  char** tokens = malloc(bufsize * sizeof(char*));
+  char* token, **tokens_backup;
 
   if (!tokens) {
     fprintf(stderr, "cash: allocation error\n");
@@ -206,8 +206,8 @@ char **split_line(char *line)
 
 void loop(void)
 {
-  char *line;
-  char **args;
+  char* line;
+  char** args;
   int status;
 
   do {
@@ -221,7 +221,7 @@ void loop(void)
   } while (status);
 }
 
-int main(int argc, char **argv)
+int main(int argc, char** argv)
 {
   // Load config files, if any.
 
