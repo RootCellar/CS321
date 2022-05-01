@@ -159,7 +159,8 @@ char* read_line(void)
     }
     position++;
 
-    // If we have exceeded the buffer, reallocate.
+    // Extending the buffer is not part of this assignment.
+    /*
     if (position >= bufsize) {
       bufsize += CASH_RL_BUFSIZE;
       buffer = realloc(buffer, bufsize);
@@ -167,6 +168,14 @@ char* read_line(void)
         fprintf(stderr, "cash: allocation error\n");
         exit(EXIT_FAILURE);
       }
+    }
+    */
+
+    // If the line is 101+ characters, print an error and truncate
+    if(position > 100) {
+      fprintf(stderr, "cash: line of input is too long (100 chars max). Truncating...\n");
+      buffer[position] = '\0';
+      return buffer;
     }
   }
 #endif
