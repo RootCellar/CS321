@@ -19,16 +19,19 @@
 int cd_command(char** args);
 int help_command(char** args);
 int exit_command(char** args);
+int print_command(char** args);
 
 char* builtin_str[] = {
   "cd",
   "help",
+  "print",
   "exit"
 };
 
 int (*builtin_func[]) (char **) = {
   &cd_command,
   &help_command,
+  &print_command,
   &exit_command
 };
 
@@ -40,8 +43,7 @@ int num_builtins() {
   Builtin function implementations.
 */
 
-int cd_command(char** args)
-{
+int cd_command(char** args) {
   if (args[1] == NULL) {
     fprintf(stderr, "cash: expected argument to \"cd\"\n");
   } else {
@@ -52,11 +54,10 @@ int cd_command(char** args)
   return 1;
 }
 
-int help_command(char** args)
-{
+int help_command(char** args) {
   int i;
   printf("Darian Marvel's CASH\n");
-  printf("Type program names and arguments, and hit enter.\n");
+  printf("Type commands and their arguments, and hit enter.\n");
   printf("The following are built in:\n");
 
   for (i = 0; i < num_builtins(); i++) {
@@ -67,13 +68,16 @@ int help_command(char** args)
   return 1;
 }
 
-int exit_command(char** args)
-{
+int exit_command(char** args) {
   return 0;
 }
 
-int launch(char** args)
-{
+int print_command(char** args)  {
+  printf("Shell pid: %d\n", getpid());
+  return 1;
+}
+
+int launch(char** args) {
   pid_t pid;
   int status;
 
