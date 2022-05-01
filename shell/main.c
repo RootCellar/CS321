@@ -72,7 +72,7 @@ int exit_command(char** args) {
   return 0;
 }
 
-int print_command(char** args)  {
+int print_command(char** args) {
   printf("Shell pid: %d\n", getpid());
   return 1;
 }
@@ -101,8 +101,7 @@ int launch(char** args) {
   return 1;
 }
 
-int execute(char** args)
-{
+int execute(char** args) {
   int i;
 
   if (args[0] == NULL) {
@@ -119,8 +118,7 @@ int execute(char** args)
   return launch(args);
 }
 
-char* read_line(void)
-{
+char* read_line(void) {
 #ifdef CASH_USE_STD_GETLINE
   char* line = NULL;
   ssize_t bufsize = 0; // have getline allocate a buffer for us
@@ -184,8 +182,7 @@ char* read_line(void)
 #define CASH_TOK_BUFSIZE 64
 #define CASH_TOK_DELIM " \t\r\n\a"
 
-char** split_line(char* line)
-{
+char** split_line(char* line) {
   int bufsize = CASH_TOK_BUFSIZE, position = 0;
   char** tokens = malloc(bufsize * sizeof(char*));
   char* token, **tokens_backup;
@@ -205,7 +202,7 @@ char** split_line(char* line)
       tokens_backup = tokens;
       tokens = realloc(tokens, bufsize * sizeof(char*));
       if (!tokens) {
-		free(tokens_backup);
+		    free(tokens_backup);
         fprintf(stderr, "cash: allocation error\n");
         exit(EXIT_FAILURE);
       }
@@ -217,8 +214,7 @@ char** split_line(char* line)
   return tokens;
 }
 
-void loop(void)
-{
+void loop(void) {
   char* line;
   char** args;
   int status;
@@ -234,8 +230,7 @@ void loop(void)
   } while (status);
 }
 
-int main(int argc, char** argv)
-{
+int main(int argc, char** argv) {
   // Load config files, if any.
 
   // Run command loop.
